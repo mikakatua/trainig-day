@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: app2
+  name: app2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app2
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: app2
+    spec:
+      containers:
+      - image: mikakatua/app2-prod
+        name: app2
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m

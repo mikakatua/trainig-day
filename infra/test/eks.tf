@@ -61,6 +61,8 @@ module "eks" {
     }
   }
   manage_aws_auth = false
+  write_kubeconfig = false
+  enable_irsa = true
 
   tags = var.common_tags
 }
