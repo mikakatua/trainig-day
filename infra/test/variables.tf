@@ -24,3 +24,10 @@ variable common_tags {
     project = "trainig-day"
   }
 }
+
+variable rds_name {
+  description = "RDS Mysql name"
+  type        = string
+  default     = "mysql-test"
+}
+
