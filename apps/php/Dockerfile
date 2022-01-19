@@ -1,8 +1,8 @@
 FROM php:7.2-apache
-ARG MY_ENV
-ENV APP_ENV $MY_ENV
+ENV APP_ENV dev
 WORKDIR /var/www/html
-COPY index.php .
-COPY config.$APP_ENV ./config
+# Use a volume instead
+#COPY index.php .
+# Use a configmap instead
+#COPY config.$APP_ENV ./config
 EXPOSE 80
-USER nobody

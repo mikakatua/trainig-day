@@ -17,11 +17,55 @@ spec:
       labels:
         app: app2
     spec:
+      initContainers:
+      - name: init-app2
+        image: busybox
+        env:
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: app2-env
+              key: APP_ENV
+        command: ['sh', '-c', "cp /mnt/config.$APP_ENV /var/www/html/config"]
+        volumeMounts:
+        - mountPath: "/var/www/html"
+          name: doc-root
+        - mountPath: "/mnt"
+          name: config
       containers:
-      - image: mikakatua/app2-prod
+      - image: mikakatua/app2
         name: app2
+        env:
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: app2-env
+              key: APP_ENV
+        readinessProbe:
+          exec:
+            command:
+            - cat
+            - /var/www/html/index.php
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 60
+        volumeMounts:
+        - mountPath: "/var/www/html"
+          name: doc-root
         resources:
           limits:
             cpu: 500m
           requests:
             cpu: 200m
+      volumes:
+      - name: doc-root
+        persistentVolumeClaim:
+          claimName: pvc-www
+      - name: config
+        configMap:
+          name: app2-conf
