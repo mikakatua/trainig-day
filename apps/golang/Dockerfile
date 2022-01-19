@@ -8,7 +8,7 @@ RUN go mod init && go build -o /app
 # final stage
 FROM alpine:3.15
 COPY --from=builder /app /app
-RUN touch /file.p12
 EXPOSE 80
-USER nobody
+# Use a volume secret instead
+#RUN touch /file.p12
 CMD ["/app"]

@@ -20,8 +20,29 @@ spec:
       containers:
       - image: mikakatua/app1
         name: app1
+        volumeMounts:
+        - name: p12-file
+          mountPath: /file.p12
+          readOnly: true
+        readinessProbe:
+          exec:
+            command:
+            - cat
+            - /file.p12/mycert
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 60
         resources:
           limits:
             cpu: 500m
           requests:
             cpu: 200m
+      volumes:
+      - name: p12-file
+        secret:
+          secretName: p12-secret
